@@ -102,6 +102,7 @@ export class ImageInputComponent implements AfterViewInit {
         const file = event.target.files[0];
 
         if (file) {
+            this.imageSrc.set('');
             const verifiedImages = this.store.getVerifiedImages();
             this.disableVerify = verifiedImages.some(x => x.file === file);
 
