@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ImageInputComponent } from './image-input/image-input.component';
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    imports: [ImageInputComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'faceapp';
+    title = 'faceapp';
 }

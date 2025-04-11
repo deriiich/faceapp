@@ -1,0 +1,12 @@
+<ul class="list-group d-flex flex-column flex-md-row gap-3 gap-sm-1">
+    @let images = verifiedImages();
+    @if (images) {
+    @for (image of images; track image?.id) {
+    <li class="list-group-item d-flex align-items-center border rounded" (click)="onImageClick.emit(image)">
+        <img [src]="image?.base64string" [alt]="image.file?.name" class="img-thumbnail me-2"
+            style="width: 50px; height: 50px;" />
+        <span>{{ image.file?.name }}</span>
+    </li>
+    }
+    }
+</ul>
