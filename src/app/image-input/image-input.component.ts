@@ -20,22 +20,22 @@ export class ImageInputComponent implements AfterViewInit {
     @ViewChild('fileInput', { static: false }) fileInputRef!: ElementRef;
 
     store = inject(ImageStore);
-    imageSrc = '';
+    imageSrc = signal<string>('');
     content!: TemplateRef<any>;
     imageAspectRatio: number = 1;
     disableVerify = false;
     error = this.store.getError();
     alertType = computed(() => this.error()?.toLowerCase().includes('multiple') ? 'warning' : 'danger');
-    // fileSize = computed(() => {
-    //     const file = this.store.getFile();
-    //     const size = this.convertToMb(file!.size);
-    //     const name = file!.name;
+    fileSize = computed(() => {
+        const file = this.store.getFile();
+        const size = this.convertToMb(file!.size);
+        const name = file!.name;
 
-    //     return {
-    //         size,
-    //         name
-    //     };
-    // });
+        return {
+            size,
+            name
+        };
+    });
 
     progressBarConfig = computed(() => ({
         text: this.store.getProgressBarText(),
@@ -66,31 +66,31 @@ export class ImageInputComponent implements AfterViewInit {
         effect(() => {
             const { mappedResults, base64string } = this.results();
             if (mappedResults.length > 0 && base64string) {
-                // requestAnimationFrame(() => {
-                //     this.drawCanvas(mappedResults, base64string);
-                // });
+                requestAnimationFrame(() => {
+                    this.drawCanvas(mappedResults, base64string);
+                });
 
             }
         });
     }
 
 
-    // @HostListener('window:resize', ['$event'])
-    // onResize(event: Event): void {
-    //     if (this.canvasRef?.nativeElement) {
-    //         this.updateCanvasSize();
-    //         if (this.results().mappedResults.length > 0 && this.results().base64string) {
-    //             this.drawCanvas(this.results().mappedResults, this.results().base64string);
-    //         }
-    //     }
-    // }
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
+        if (this.canvasRef?.nativeElement) {
+            this.updateCanvasSize();
+            if (this.results().mappedResults.length > 0 && this.results().base64string) {
+                this.drawCanvas(this.results().mappedResults, this.results().base64string);
+            }
+        }
+    }
 
     ngAfterViewInit(): void {
-        // setTimeout(() => {
-        //     if (this.canvasRef?.nativeElement) {
-        //         this.updateCanvasSize();
-        //     }
-        // }, 1000);
+        setTimeout(() => {
+            if (this.canvasRef?.nativeElement) {
+                this.updateCanvasSize();
+            }
+        }, 1000);
     }
 
     triggerFileInput(): void {
@@ -132,7 +132,7 @@ export class ImageInputComponent implements AfterViewInit {
 
         const reader = new FileReader();
         reader.onload = (e: any) => {
-            this.imageSrc = e.target.result;
+            this.imageSrc.set(e.target.result);
         };
         reader.readAsDataURL(file);
     }
@@ -143,7 +143,7 @@ export class ImageInputComponent implements AfterViewInit {
 
         const canvas = this.canvasRef.nativeElement;
         const ctx = canvas.getContext('2d');
-        if (!ctx || !this.imageSrc) return;
+        if (!ctx || !this.imageSrc()) return;
 
         const img = new Image();
         img.onload = () => {
@@ -215,15 +215,17 @@ export class ImageInputComponent implements AfterViewInit {
         }
 
         this.store.setSelectedImage(obj);
-        // this.imageSrc.set(obj.base64string);
+        this.imageSrc.set(obj.base64string);
 
-        requestAnimationFrame(() => {
-            this.drawCanvas(obj?.results, obj?.base64string);
-        });
+        setTimeout(() => {
+            requestAnimationFrame(() => {
+                this.drawCanvas(obj?.results, obj?.base64string);
+            });
+        }, 1000);
     }
 
     discard() {
-        // this.imageSrc.set('');
+        this.imageSrc.set('');
         this.store.reInitialize();
         this.fileInputRef.nativeElement.value = '';
     }

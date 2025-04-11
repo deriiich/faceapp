@@ -185,7 +185,7 @@ export const ImageStore = signalStore(
                     isLoading: false,
                     showCanvas: true
                 })
-            }, 500);
+            }, 1000);
         }
     })),
 
