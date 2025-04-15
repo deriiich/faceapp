@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FaceDetectionApiResponse } from '../models/faceDetection.model';
-
+import { environment } from "@environments/environment"
 @Injectable({
     providedIn: 'root',
 })
 
 export class FaceDetectionService {
-    private readonly apiUrl = '/api/detect';
+    private readonly apiUrl = environment.apiUrl;
 
     constructor(private http: HttpClient) { }
 
