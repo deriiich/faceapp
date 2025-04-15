@@ -1,4 +1,4 @@
 export const environment = {
-    production: false,
+    production: true,
     apiUrl: 'https://faceapi-2snbrq2o3a-ue.a.run.app'
 };
