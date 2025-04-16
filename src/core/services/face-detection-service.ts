@@ -2,17 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FaceDetectionApiResponse } from '../models/faceDetection.model';
+import { environment } from '@environments/environment.prod';
 @Injectable({
     providedIn: 'root',
 })
 
 export class FaceDetectionService {
 
-    private readonly apiUrl: string = '';
+    private readonly apiUrl: string = environment.apiUrl;
 
     constructor(private http: HttpClient) {
-        const isLocal = window.location.hostname === 'localhost';
-        this.apiUrl = isLocal ? '/api/detect' : 'https://faceapi-2snbrq2o3a-ue.a.run.app';
     }
 
     detectFaces(imageBase64: string): Observable<FaceDetectionApiResponse> {
